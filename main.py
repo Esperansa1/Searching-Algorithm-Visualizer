@@ -134,6 +134,10 @@ while True:
                 if start_point != None and end_point != None:
                     algorithm_manager.run_algorithm(
                         start_point, end_point, grid)
+            # if event.key == pygame.K_n:
+            #     if start_point != None and end_point != None:
+            #         algorithm_manager.loop_algorithm()
+
             if event.key == pygame.K_p:
                 algorithm_manager.next_algorithm()
 

@@ -14,12 +14,6 @@ class Dijkstra(Algorithm):
         self.open_set = []
         self.closed_set = []
 
-    def initialize_h_scores(self):
-        for row in self.grid:
-            for cell in row:
-                cell.h = math.dist(
-                    (cell.i, cell.j), (self.end_point.i, self.end_point.j))  # Euclidan
-
     def initialize(self):
         self.closed_set = []
         self.open_set = [self.start_point]
@@ -28,7 +22,7 @@ class Dijkstra(Algorithm):
             for cell in row:
                 if cell.color != BLACK and cell.color != BLUE:
                     cell.color = WHITE
-        self.initialize_h_scores()
+        self.start_point.h = 0
 
     def color_sets(self):
         for cell in self.open_set:
@@ -36,6 +30,8 @@ class Dijkstra(Algorithm):
         for cell in self.closed_set:
             if cell.color != PINK:
                 cell.color = RED
+        self.start_point.color = BLUE
+        self.end_point.color = BLUE
 
     def reconstruct_path(self):
         path = []

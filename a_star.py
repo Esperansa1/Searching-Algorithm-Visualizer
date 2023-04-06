@@ -30,7 +30,7 @@ class A_Star(Algorithm):
     def get_lowest_f_score(self):
         best_cell = self.open_set[0]
         for cell in self.open_set:
-            if cell.f < best_cell.h:
+            if cell.f < best_cell.f:
                 best_cell = cell
         return best_cell
 
@@ -53,6 +53,8 @@ class A_Star(Algorithm):
         for cell in self.closed_set:
             if cell.color != PINK:
                 cell.color = RED
+        self.start_point.color = BLUE
+        self.end_point.color = BLUE
 
     def reconstruct_path(self):
         path = []
@@ -84,8 +86,6 @@ class A_Star(Algorithm):
                     neighbour.f = tentantive_gScore + neighbour.h
                     if neighbour not in self.open_set:
                         self.open_set.append(neighbour)
-        self.start_point.color = BLUE
-        self.end_point.color = BLUE
 
     def run_algorithm(self, start_point, end_point, grid):
         self.start_point = start_point
