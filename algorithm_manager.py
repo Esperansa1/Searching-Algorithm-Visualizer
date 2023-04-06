@@ -1,6 +1,9 @@
 import pygame
-from a_star import A_Star
-from dijkstra import Dijkstra
+from Algorithms.a_star import A_Star
+from Algorithms.dijkstra import Dijkstra
+from Algorithms.bfs import BFS
+from Algorithms.greedy_bfs import GreedyBFS
+
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -14,7 +17,8 @@ class AlgorithmManager:
         self.screen = screen
         self.width = width
         self.height = height
-        self.algorithms = [A_Star(), Dijkstra()]
+        self.algorithms = [A_Star(),
+                           Dijkstra(), BFS(), GreedyBFS()]
         self.current_algorithm = self.algorithms[0]
         self.index = 0
         self.run_simulation = False
@@ -24,6 +28,7 @@ class AlgorithmManager:
         if self.index == len(self.algorithms):
             self.index = 0
         self.current_algorithm = self.algorithms[self.index]
+        self.run_simulation = False
 
     def draw_state(self):
         font = pygame.font.Font('freesansbold.ttf', 32)

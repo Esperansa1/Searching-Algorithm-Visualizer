@@ -1,8 +1,8 @@
 import sys
 import pygame
-from cell import Cell
-from a_star import A_Star
 from algorithm_manager import AlgorithmManager
+from grid_manager import GridManager
+
 
 # Color RGB Codes
 
@@ -27,61 +27,10 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 start_point = None
 end_point = None
 
-ROWS = 20
-CELL_WIDTH = WIDTH // ROWS
-CELL_HEIGHT = HEIGHT // ROWS
-grid = []
+# Draws and manages the grid
+grid_manager = GridManager(WIDTH, HEIGHT)
 
-# Search algorithms options
-a_star = A_Star()
-
-
-# Manages the information appearing on screen and cycling algorithms
 algorithm_manager = AlgorithmManager(screen, WIDTH, HEIGHT)
-
-
-# Initializing the 2 dimensional grid
-def initialize_grid():
-    global start_point, end_point
-    for i in range(ROWS):
-        empty_grid = []
-        for j in range(ROWS):
-            empty_grid.append(Cell(i, j, WHITE))
-        grid.append(empty_grid)
-
-    for row in grid:
-        for cell in row:
-            cell.set_neighbours(grid)
-    # start_point = grid[1][1]
-    # end_point = grid[49][49]
-
-
-def draw_grid():
-    """
-    Draws the grid lines
-    Return: None
-    """
-    for i in range(ROWS):
-        pygame.draw.line(screen, BLACK, (i*CELL_WIDTH, 0),
-                         (i*CELL_WIDTH, HEIGHT))
-        pygame.draw.line(screen, BLACK, (0, i*CELL_HEIGHT),
-                         (WIDTH, i*CELL_HEIGHT))
-
-
-def get_cell_clicked() -> Cell:
-    """ Returns the cell clicked """
-    x_mouse, y_mouse = pygame.mouse.get_pos()
-
-    x_grid = x_mouse // CELL_WIDTH
-    y_grid = y_mouse // CELL_HEIGHT
-
-    return grid[x_grid][y_grid]
-
-
-def draw_cells():
-    for row in grid:
-        for cell in row:
-            cell.draw(screen, CELL_WIDTH, CELL_HEIGHT)
 
 
 def on_click(cell, click):
@@ -105,16 +54,6 @@ def on_click(cell, click):
         elif cell == end_point:
             end_point = None
 
-    # Game loop.
-
-
-initialize_grid()
-
-start_simulation = False
-
-open_set = []
-closed_set = []
-
 
 while True:
     screen.fill(WHITE)
@@ -125,27 +64,26 @@ while True:
             sys.exit()
 
         click = pygame.mouse.get_pressed()
-        if (click[0] or click[2]) and algorithm_manager.run_simulation == False:
-            cell = get_cell_clicked()
-            on_click(cell, click)
+        if (click[0] or click[2]) and not algorithm_manager.run_simulation:
+            cell = grid_manager.get_clicked_cell()
+            if cell != None:
+                on_click(cell, click)
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 if start_point != None and end_point != None:
                     algorithm_manager.run_algorithm(
-                        start_point, end_point, grid)
+                        start_point, end_point, grid_manager.grid)
             # if event.key == pygame.K_n:
             #     if start_point != None and end_point != None:
             #         algorithm_manager.loop_algorithm()
 
             if event.key == pygame.K_p:
                 algorithm_manager.next_algorithm()
-
     if algorithm_manager.run_simulation:
         algorithm_manager.loop_algorithm()
 
-    draw_grid()
-    draw_cells()
+    grid_manager.draw(screen)
     algorithm_manager.draw_state()
 
     pygame.display.update()

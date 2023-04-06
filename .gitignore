@@ -4,3 +4,7 @@ __pycache__/dijkstra.cpython-310.pyc
 __pycache__/a_star.cpython-310.pyc
 __pycache__/cell.cpython-310.pyc
 __pycache__/dijkstra.cpython-310.pyc
+Algorithms/__pycache__/a_star.cpython-310.pyc
+Algorithms/__pycache__/bfs.cpython-310.pyc
+Algorithms/__pycache__/dijkstra.cpython-310.pyc
+Algorithms/__pycache__/greedy_bfs.cpython-310.pyc
