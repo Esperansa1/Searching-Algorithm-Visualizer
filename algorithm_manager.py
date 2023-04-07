@@ -32,12 +32,28 @@ class AlgorithmManager:
         self.current_algorithm = self.algorithms[self.index]
         self.run_simulation = False
 
-    def draw_state(self):
+    def draw_state(self, weight_mode):
         font = pygame.font.Font('freesansbold.ttf', 32)
         text = font.render(
             f'Current Algorithm: {self.current_algorithm.name}', True, BLACK)
         self.screen.blit(
-            text, (self.width - 50 - text.get_width(), text.get_height() + 15))
+            text, (self.width - 45 - text.get_width(), text.get_height() + 15))
+
+        current_heuristic = self.current_algorithm.current_heuristic
+        if current_heuristic != None:
+            text = font.render(
+                f'Current Heuristic: {self.current_algorithm.current_heuristic}', True, BLACK)
+            self.screen.blit(
+                text, (self.width - 45 - text.get_width(), text.get_height() + 55))
+
+        mode = "Running Simulation"
+        if weight_mode and not self.run_simulation:
+            mode = "Weight Mode"
+        elif not weight_mode and not self.run_simulation:
+            mode = "Wall Mode"
+
+        text = font.render(mode, True, BLACK)
+        self.screen.blit(text, (45, text.get_height() + 15))
 
     def run_algorithm(self, start_point, end_point, grid):
         self.run_simulation = True
