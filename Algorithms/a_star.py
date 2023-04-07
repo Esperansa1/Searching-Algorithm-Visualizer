@@ -52,8 +52,9 @@ class A_Star(Algorithm):
         self.open_set.remove(current_cell)
         self.closed_set.append(current_cell)
 
+        current_cell.is_visited = True
         for neighbour in current_cell.neighbours:
-            if neighbour.color == BLACK or neighbour in self.closed_set:
+            if neighbour.color == BLACK or neighbour.is_visited:
                 continue
 
             tentantive_gScore = current_cell.g + 1
