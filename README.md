@@ -5,6 +5,9 @@
 ## Instructions
 
 - Press P to cycle to the next algorithm
+- Press N to cycle to the next heuristic function (if available)
+- Press W to change to weight mode
+- Press C to clear walls and weights
 - Use left mouse button to place start and end point
 - After start and end point are placed, click left click to place walls
 - Use right click to remove unwanted cells and to adjust the field
@@ -23,7 +26,10 @@
 - Dijkstra's Algorithm
 - BFS
 - Greedy BFS (Best first search) 
+- DFS
 
 ## Coming Soon 
-- Ability to speed up the visualization
+- Heuristic Manager ✔
+- Weight nodes ✔
 - Maze constructors
+- Add diagonals
