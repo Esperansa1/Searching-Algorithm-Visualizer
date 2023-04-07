@@ -21,6 +21,8 @@
 ## Algorithms included:
 - A*
 - Dijkstra's Algorithm
+- BFS
+- Greedy BFS (Best first search) 
 
 ## Coming Soon 
 - Ability to speed up the visualization
