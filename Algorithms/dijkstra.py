@@ -1,18 +1,10 @@
 from algorithm import Algorithm
-import math
 BLACK = (0, 0, 0)  # Wall color
-WHITE = (255, 255, 255)  # Empty cell color
-RED = (255, 0, 0)  # Closed set color
-GREEN = (0, 255, 0)  # Open set color
-BLUE = (0, 0, 255)  # Start and end point colors
-PINK = (255, 192, 203)  # Path color
 
 
 class Dijkstra(Algorithm):
     def __init__(self):
         super().__init__("Dijkstra")
-        self.open_set = []
-        self.closed_set = []
 
     def initialize(self):
         super().initialize()
@@ -29,28 +21,24 @@ class Dijkstra(Algorithm):
         return best_cell
 
     def loop_algorithm(self):
-        if len(self.open_set) == 0:
-            self.run_simulation = False
+        if self.is_finished():
             return
 
         self.color_sets()
-        cell = self.get_closest_cell()
+        cuurent_cell = self.get_closest_cell()
+        self.is_goal(cuurent_cell)
 
-        if cell == self.end_point:
-            self.reconstruct_path()
-            self.run_simulation = False
+        self.open_set.remove(cuurent_cell)
+        self.closed_set.append(cuurent_cell)
 
-        self.open_set.remove(cell)
-        self.closed_set.append(cell)
-
-        for neighbour in cell.neighbours:
+        for neighbour in cuurent_cell.neighbours:
             if neighbour.color == BLACK or neighbour.is_visited:
                 continue
-            temp_distance = cell.h + 1
+            temp_distance = cuurent_cell.h + neighbour.weight
 
             if temp_distance < neighbour.h:
                 neighbour.h = temp_distance
-                neighbour.parent = cell
+                neighbour.parent = cuurent_cell
                 if neighbour not in self.open_set:
                     self.open_set.append(neighbour)
 
