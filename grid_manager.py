@@ -42,7 +42,6 @@ class GridManager:
 
         x_grid = x_mouse // self.CELL_WIDTH
         y_grid = y_mouse // self.CELL_HEIGHT
-        print(x_grid, y_grid)
 
         if x_grid >= len(self.grid) or y_grid >= len(self.grid[0]) or x_grid < 0 or y_grid < 0:
             return None
@@ -57,3 +56,10 @@ class GridManager:
     def draw(self, screen):
         self.draw_grid(screen)
         self.draw_cells(screen)
+
+    def clear_weight_and_walls(self):
+        for row in self.grid:
+            for cell in row:
+                if cell.color == BLACK or cell.weight > 1:
+                    cell.weight = 1
+                    cell.color = WHITE
