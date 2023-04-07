@@ -37,7 +37,8 @@ class BFS(Algorithm):
         for neighbour in current_cell.neighbours:
             if neighbour.color == BLACK or neighbour in self.closed_set:
                 continue
-            if neighbour.parent == None:  # If parent == None then  -> not in closed set
+            if not neighbour.is_visited:
+                neighbour.is_visited = True
                 self.open_set.append(neighbour)
                 neighbour.parent = current_cell
 
