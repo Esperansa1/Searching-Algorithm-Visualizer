@@ -44,7 +44,7 @@ class Dijkstra(Algorithm):
         self.closed_set.append(cell)
 
         for neighbour in cell.neighbours:
-            if neighbour.color == BLACK or neighbour in self.closed_set:
+            if neighbour.color == BLACK or neighbour.is_visited:
                 continue
             temp_distance = cell.h + 1
 
