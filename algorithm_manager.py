@@ -2,6 +2,8 @@ import pygame
 from Algorithms.a_star import A_Star
 from Algorithms.dijkstra import Dijkstra
 from Algorithms.bfs import BFS
+from Algorithms.dfs import DFS
+
 from Algorithms.greedy_bfs import GreedyBFS
 
 BLACK = (0, 0, 0)
@@ -18,7 +20,7 @@ class AlgorithmManager:
         self.width = width
         self.height = height
         self.algorithms = [A_Star(),
-                           Dijkstra(), BFS(), GreedyBFS()]
+                           Dijkstra(), BFS(), GreedyBFS(), DFS()]
         self.current_algorithm = self.algorithms[0]
         self.index = 0
         self.run_simulation = False
