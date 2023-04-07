@@ -1,22 +1,19 @@
 from algorithm import Algorithm
-import math
+
 BLACK = (0, 0, 0)
 
 
 class A_Star(Algorithm):
     def __init__(self):
         super().__init__("A*")
-        self.open_set = []
-        self.closed_set = []
+
+        self.heuristic_options = ["Manhattan",
+                                  "Euclidean", "Octile", "Chebyshev"]
+        self.current_heuristic = self.heuristic_options[0]
 
     def initialize(self):
         super().initialize()
-        for row in self.grid:
-            for cell in row:
-                cell.g = float('inf')
         self.start_point.g = 0
-        self.initialize_h_scores()
-        self.initialize_f_scores()
 
     def get_lowest_f_score(self):
         best_cell = self.open_set[0]
@@ -25,39 +22,23 @@ class A_Star(Algorithm):
                 best_cell = cell
         return best_cell
 
-    def initialize_h_scores(self):
-        for row in self.grid:
-            for cell in row:
-                cell.h = math.dist(
-                    (cell.i, cell.j), (self.end_point.i, self.end_point.j))  # Euclidan
-                # cell.h = (cell.i - self.end_point.i) ** 2 + \
-                #     (cell.j - self.end_point.j) ** 2
-
-    def initialize_f_scores(self):
-        for row in self.grid:
-            for cell in row:
-                cell.calculate_f_score()
-
     def loop_algorithm(self):
-        if len(self.open_set) == 0:
-            self.run_simulation = False
+        if self.is_finished():
             return
 
         self.color_sets()
         current_cell = self.get_lowest_f_score()
-        if current_cell == self.end_point:
-            self.reconstruct_path()
-            self.run_simulation = False
+        self.is_goal(current_cell)
 
         self.open_set.remove(current_cell)
         self.closed_set.append(current_cell)
-
         current_cell.is_visited = True
+
         for neighbour in current_cell.neighbours:
             if neighbour.color == BLACK or neighbour.is_visited:
                 continue
 
-            tentantive_gScore = current_cell.g + 1
+            tentantive_gScore = current_cell.g + neighbour.weight
             if tentantive_gScore < neighbour.g:
                 neighbour.parent = current_cell
                 neighbour.g = tentantive_gScore
