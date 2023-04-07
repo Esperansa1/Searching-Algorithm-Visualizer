@@ -42,7 +42,7 @@ class GreedyBFS(Algorithm):
         self.closed_set.append(current_cell)
 
         for neighbour in current_cell.neighbours:
-            if neighbour.color == BLACK or neighbour in self.closed_set:
+            if neighbour.color == BLACK or neighbour.is_visited:
                 continue
             if neighbour.parent == None:
                 if neighbour == self.end_point:
@@ -50,8 +50,9 @@ class GreedyBFS(Algorithm):
                     self.reconstruct_path()
                     self.run_simulation = False
                 else:
-                    self.open_set.append(neighbour)
+                    neighbour.is_visited = True
                     neighbour.parent = current_cell
+                    self.open_set.append(neighbour)
 
     def run_algorithm(self, start_point, end_point, grid):
         super().run_algorithm(start_point, end_point, grid)
