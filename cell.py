@@ -9,9 +9,12 @@ class Cell:
         self.color = color
         self.parent = None
         self.neighbours = []
+        self.is_visited = False
+
         self.h = float('inf')
         self.g = float('inf')
         self.f = float('inf')
+
         self.font = pygame.font.Font('freesansbold.ttf', 10)
 
     def __repr__(self) -> str:
