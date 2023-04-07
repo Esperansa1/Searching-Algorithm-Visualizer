@@ -33,21 +33,34 @@ grid_manager = GridManager(WIDTH, HEIGHT)
 algorithm_manager = AlgorithmManager(screen, WIDTH, HEIGHT)
 
 
+weight_mode = False
+
+
 def on_click(cell, click):
     global start_point, end_point
 
     if click[0]:  # If left click is pressed
+        if weight_mode and cell.color != BLUE:
+            cell.weight += 1
+            return
+
         if start_point != None and end_point != None and cell != end_point and cell != start_point:
             cell.color = BLACK
 
         if start_point == None:
             start_point = cell
+            start_point.weight = 1
             start_point.color = BLUE
         elif end_point == None and cell != start_point:
             end_point = cell
+            end_point.weight = 1
             end_point.color = BLUE
 
     elif click[2]:  # If right click is pressed
+        if weight_mode and cell.color != BLUE:
+            if cell.weight > 1:
+                cell.weight -= 1
+                return
         cell.color = WHITE
         if cell == start_point:
             start_point = None
@@ -74,17 +87,24 @@ while True:
                 if start_point != None and end_point != None:
                     algorithm_manager.run_algorithm(
                         start_point, end_point, grid_manager.grid)
-            # if event.key == pygame.K_n:
-            #     if start_point != None and end_point != None:
-            #         algorithm_manager.loop_algorithm()
 
-            if event.key == pygame.K_p:
+            elif event.key == pygame.K_p:
                 algorithm_manager.next_algorithm()
+
+            elif event.key == pygame.K_w:
+                weight_mode = not weight_mode
+
+            elif event.key == pygame.K_c and not algorithm_manager.run_simulation:
+                grid_manager.clear_weight_and_walls()
+
+            elif event.key == pygame.K_n and not algorithm_manager.run_simulation:
+                algorithm_manager.current_algorithm.next_heuristic_option()
+
     if algorithm_manager.run_simulation:
         algorithm_manager.loop_algorithm()
 
     grid_manager.draw(screen)
-    algorithm_manager.draw_state()
+    algorithm_manager.draw_state(weight_mode)
 
     pygame.display.update()
     clock.tick(fps)
