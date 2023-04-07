@@ -1,28 +1,19 @@
 from algorithm import Algorithm
-import math
+
 BLACK = (0, 0, 0)
 
 
 class GreedyBFS(Algorithm):
     def __init__(self):
         super().__init__("Greedy BFS")
-        self.open_set = []
-        self.closed_set = []
+
+        self.heuristic_options = ["Manhattan",
+                                  "Euclidean", "Octile", "Chebyshev"]
+        self.current_heuristic = self.heuristic_options[0]
 
     def initialize(self):
         super().initialize()
-        for row in self.grid:
-            for cell in row:
-                cell.parent = None
-                cell.h = float('inf')
-        self.initialize_h_scores()
         self.start_point.h = 0
-
-    def initialize_h_scores(self):
-        for row in self.grid:
-            for cell in row:
-                cell.h = math.dist(
-                    (cell.i, cell.j), (self.end_point.i, self.end_point.j))  # Euclidan
 
     def get_closest_cell(self):
         best_cell = self.open_set[0]
@@ -32,8 +23,7 @@ class GreedyBFS(Algorithm):
         return best_cell
 
     def loop_algorithm(self):
-        if len(self.open_set) == 0:
-            self.run_simulation = False
+        if self.is_finished():
             return
 
         self.color_sets()
@@ -44,7 +34,7 @@ class GreedyBFS(Algorithm):
         for neighbour in current_cell.neighbours:
             if neighbour.color == BLACK or neighbour.is_visited:
                 continue
-            if neighbour.parent == None:
+            if not neighbour.is_visited:
                 if neighbour == self.end_point:
                     neighbour.parent = current_cell
                     self.reconstruct_path()
