@@ -15,7 +15,8 @@ class Algorithm:
 
     def color_sets(self):
         for cell in self.open_set:
-            cell.color = GREEN
+            if cell.color != PINK:
+                cell.color = GREEN
         for cell in self.closed_set:
             if cell.color != PINK:
                 cell.color = RED
@@ -34,6 +35,7 @@ class Algorithm:
         self.run_simulation = True
         for row in self.grid:
             for cell in row:
+                cell.is_visited = False
                 if cell.color != BLACK and cell.color != BLUE:
                     cell.color = WHITE
 
