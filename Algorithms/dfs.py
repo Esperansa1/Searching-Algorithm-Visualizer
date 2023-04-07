@@ -1,31 +1,20 @@
 from algorithm import Algorithm
+
 BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-PINK = (255, 192, 203)
 
 
 class DFS(Algorithm):
     def __init__(self):
         super().__init__("DFS")
-        self.open_set = []
-        self.closed_set = []
-
-    def initialize(self):
-        super().initialize()
 
     def loop_algorithm(self):
-        if len(self.open_set) == 0:
-            self.run_simulation = False
+        if self.is_finished():
             return
+
         self.color_sets()
         current_cell = self.open_set.pop()
 
-        if current_cell == self.end_point:
-            self.reconstruct_path()
-            self.run_simulation = False
+        self.is_goal(current_cell)
 
         if not current_cell.is_visited:
             current_cell.is_visited = True
