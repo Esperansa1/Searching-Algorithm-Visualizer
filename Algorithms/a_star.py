@@ -38,7 +38,8 @@ class A_Star(Algorithm):
             if neighbour.color == BLACK or neighbour.is_visited:
                 continue
 
-            tentantive_gScore = current_cell.g + neighbour.weight
+            tentantive_gScore = current_cell.g + neighbour.weight + \
+                self.heuristic_function(current_cell, neighbour)
             if tentantive_gScore < neighbour.g:
                 neighbour.parent = current_cell
                 neighbour.g = tentantive_gScore
