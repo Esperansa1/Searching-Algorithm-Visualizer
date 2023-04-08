@@ -15,20 +15,19 @@ class DFS(Algorithm):
         current_cell = self.open_set.pop()
 
         self.is_goal(current_cell)
+        self.closed_set.append(current_cell)
+        for neighbour in current_cell.neighbours:
+            if neighbour.color == BLACK or neighbour.is_visited:
+                continue
 
-        if not current_cell.is_visited:
-            current_cell.is_visited = True
-            self.closed_set.append(current_cell)
-            for neighbour in current_cell.neighbours:
-                if neighbour.color == BLACK or neighbour.is_visited:
-                    continue
-                neighbour.parent = current_cell
+            neighbour.parent = current_cell
+            neighbour.is_visited = True
 
-                if neighbour == self.end_point:
-                    self.reconstruct_path()
-                    self.run_simulation = False
-                else:
-                    self.open_set.append(neighbour)
+            if neighbour == self.end_point:
+                self.reconstruct_path()
+                self.run_simulation = False
+            else:
+                self.open_set.append(neighbour)
 
     def run_algorithm(self, start_point, end_point, grid):
         super().run_algorithm(start_point, end_point, grid)
