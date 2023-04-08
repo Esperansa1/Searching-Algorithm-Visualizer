@@ -22,6 +22,7 @@ class Algorithm:
         self.heuristic_index = 0
         self.heuristic_options = []
         self.current_heuristic = None
+        self.heuristic_function = None
 
     def color_sets(self):
         for cell in self.open_set:
@@ -52,15 +53,15 @@ class Algorithm:
                 if cell.color != BLACK and cell.color != BLUE:
                     cell.color = WHITE
 
-        heuristic_function = self.manhattan_dist
+        self.heuristic_function = self.manhattan_dist
         if self.current_heuristic == "Euclidean":
-            heuristic_function = self.euclidean_dist
+            self.heuristic_function = self.euclidean_dist
         elif self.current_heuristic == "Octile":
-            heuristic_function = self.octile_dist
+            self.heuristic_function = self.octile_dist
         elif self.current_heuristic == "Chebyshev":
-            heuristic_function = self.chebyshev
+            self.heuristic_function = self.chebyshev
 
-        self.initialize_h_scores(heuristic_function)
+        self.initialize_h_scores(self.heuristic_function)
         self.initialize_f_scores()
 
     def run_algorithm(self, start_point, end_point, grid):
@@ -99,11 +100,11 @@ class Algorithm:
         self.run_simulation = False
 
     def get_distances(self, cell1, cell2):
-        return cell1.i - cell2.i, cell1.j - cell2.j
+        return abs(cell1.i - cell2.i), abs(cell1.j - cell2.j)
 
     def manhattan_dist(self, cell1, cell2):
         dx, dy = self.get_distances(cell1, cell2)
-        return abs(dx) + abs(dy)
+        return dx + dy
 
     def euclidean_dist(self, cell1, cell2):  # Can also you the math.dist function
         dx, dy = self.get_distances(cell1, cell2)
@@ -112,6 +113,7 @@ class Algorithm:
 
     def octile_dist(self, cell1, cell2):
         dx, dy = self.get_distances(cell1, cell2)
+
         f = math.sqrt(2) - 1
         if dx < dy:
             return f * dx + dy
