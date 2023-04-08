@@ -32,4 +32,4 @@
 - Heuristic Manager ✔
 - Weight nodes ✔
 - Maze constructors
-- Add diagonals
+- Add diagonals ✔
