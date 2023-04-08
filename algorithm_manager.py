@@ -39,14 +39,14 @@ class AlgorithmManager:
     def draw_state(self):
         font = pygame.font.Font('freesansbold.ttf', 32)
         text = font.render(
-            f'Current Algorithm: {self.current_algorithm.name}', True, BLACK)
+            f'Algorithm: {self.current_algorithm.name}', True, BLACK)
         self.screen.blit(
             text, (self.width - 45 - text.get_width(), text.get_height() + 15))
 
         current_heuristic = self.current_algorithm.current_heuristic
         if current_heuristic != None:
             text = font.render(
-                f'Current Heuristic: {self.current_algorithm.current_heuristic}', True, BLACK)
+                f'Heuristic: {self.current_algorithm.current_heuristic}', True, BLACK)
             self.screen.blit(
                 text, (self.width - 45 - text.get_width(), text.get_height() + 55))
 
