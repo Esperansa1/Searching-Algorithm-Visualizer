@@ -24,10 +24,12 @@ class GridManager:
             for j in range(self.ROWS):
                 empty_grid.append(Cell(i, j, WHITE))
             self.grid.append(empty_grid)
+        self.update_neighbours(False)
 
+    def update_neighbours(self, add_diagonals):
         for row in self.grid:
             for cell in row:
-                cell.set_neighbours(self.grid)
+                cell.set_neighbours(self.grid, add_diagonals)
 
     def draw_grid(self, screen):  # Draws grid lines
         for i in range(self.ROWS):
