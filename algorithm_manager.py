@@ -19,11 +19,15 @@ class AlgorithmManager:
         self.screen = screen
         self.width = width
         self.height = height
+
         self.algorithms = [A_Star(),
                            Dijkstra(), BFS(), GreedyBFS(), DFS()]
         self.current_algorithm = self.algorithms[0]
         self.index = 0
         self.run_simulation = False
+
+        self.weight_mode = False
+        self.allow_diagonals = False
 
     def next_algorithm(self):
         self.index += 1
@@ -32,7 +36,7 @@ class AlgorithmManager:
         self.current_algorithm = self.algorithms[self.index]
         self.run_simulation = False
 
-    def draw_state(self, weight_mode):
+    def draw_state(self):
         font = pygame.font.Font('freesansbold.ttf', 32)
         text = font.render(
             f'Current Algorithm: {self.current_algorithm.name}', True, BLACK)
@@ -46,14 +50,14 @@ class AlgorithmManager:
             self.screen.blit(
                 text, (self.width - 45 - text.get_width(), text.get_height() + 55))
 
-        mode = "Running Simulation"
-        if weight_mode and not self.run_simulation:
-            mode = "Weight Mode"
-        elif not weight_mode and not self.run_simulation:
-            mode = "Wall Mode"
-
+        mode = self.get_mode()
         text = font.render(mode, True, BLACK)
         self.screen.blit(text, (45, text.get_height() + 15))
+
+        if self.allow_diagonals:
+            text = font.render("Allow Diagonals", True, BLACK)
+            self.screen.blit(
+                text, (self.width - 45 - text.get_width(), text.get_height() + 90))
 
     def run_algorithm(self, start_point, end_point, grid):
         self.run_simulation = True
@@ -62,3 +66,11 @@ class AlgorithmManager:
     def loop_algorithm(self):
         self.run_simulation = self.current_algorithm.run_simulation
         self.current_algorithm.loop_algorithm()
+
+    def get_mode(self):
+        mode = "Running Simulation"
+        if self.weight_mode and not self.run_simulation:
+            mode = "Weight Mode"
+        elif not self.weight_mode and not self.run_simulation:
+            mode = "Wall Mode"
+        return mode
