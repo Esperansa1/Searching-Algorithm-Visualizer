@@ -33,14 +33,11 @@ grid_manager = GridManager(WIDTH, HEIGHT)
 algorithm_manager = AlgorithmManager(screen, WIDTH, HEIGHT)
 
 
-weight_mode = False
-
-
 def on_click(cell, click):
     global start_point, end_point
 
     if click[0]:  # If left click is pressed
-        if weight_mode and cell.color != BLUE:
+        if algorithm_manager.weight_mode and cell.color != BLUE:
             cell.weight += 1
             return
 
@@ -57,7 +54,7 @@ def on_click(cell, click):
             end_point.color = BLUE
 
     elif click[2]:  # If right click is pressed
-        if weight_mode and cell.color != BLUE:
+        if algorithm_manager.weight_mode and cell.color != BLUE:
             if cell.weight > 1:
                 cell.weight -= 1
                 return
@@ -66,6 +63,30 @@ def on_click(cell, click):
             start_point = None
         elif cell == end_point:
             end_point = None
+
+
+def handle_key_press(event):
+    if event.key == pygame.K_SPACE:
+        if start_point != None and end_point != None:
+            algorithm_manager.run_algorithm(
+                start_point, end_point, grid_manager.grid)
+
+    elif event.key == pygame.K_p:
+        algorithm_manager.next_algorithm()
+
+    elif event.key == pygame.K_w:
+        algorithm_manager.weight_mode = not algorithm_manager.weight_mode
+
+    elif not algorithm_manager.run_simulation:
+        if event.key == pygame.K_c:
+            grid_manager.clear_weight_and_walls()
+
+        elif event.key == pygame.K_n:
+            algorithm_manager.current_algorithm.next_heuristic_option()
+
+        elif event.key == pygame.K_u:
+            algorithm_manager.allow_diagonals = not algorithm_manager.allow_diagonals
+            grid_manager.update_neighbours(algorithm_manager.allow_diagonals)
 
 
 while True:
@@ -83,28 +104,13 @@ while True:
                 on_click(cell, click)
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                if start_point != None and end_point != None:
-                    algorithm_manager.run_algorithm(
-                        start_point, end_point, grid_manager.grid)
-
-            elif event.key == pygame.K_p:
-                algorithm_manager.next_algorithm()
-
-            elif event.key == pygame.K_w:
-                weight_mode = not weight_mode
-
-            elif event.key == pygame.K_c and not algorithm_manager.run_simulation:
-                grid_manager.clear_weight_and_walls()
-
-            elif event.key == pygame.K_n and not algorithm_manager.run_simulation:
-                algorithm_manager.current_algorithm.next_heuristic_option()
+            handle_key_press(event)
 
     if algorithm_manager.run_simulation:
         algorithm_manager.loop_algorithm()
 
     grid_manager.draw(screen)
-    algorithm_manager.draw_state(weight_mode)
+    algorithm_manager.draw_state()
 
     pygame.display.update()
     clock.tick(fps)
