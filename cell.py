@@ -37,21 +37,33 @@ class Cell:
         screen.blit(weight, (self.i * cell_width +
                     cell_width // 2, self.j * cell_height + cell_height // 2))
 
-    def set_neighbours(self, grid):
-        try:
-            if self.i+1 < len(grid):
-                self.neighbours.append(grid[self.i+1][self.j])
+    def set_neighbours(self, grid, allow_diagonals: bool):
+        self.neighbours = []
+        if self.i+1 < len(grid):
+            self.neighbours.append(grid[self.i+1][self.j])
 
-            if self.i - 1 >= 0:
-                self.neighbours.append(grid[self.i-1][self.j])
+        if self.i - 1 >= 0:
+            self.neighbours.append(grid[self.i-1][self.j])
 
-            if self.j + 1 < len(grid[0]):
-                self.neighbours.append(grid[self.i][self.j + 1])
+        if self.j + 1 < len(grid[0]):
+            self.neighbours.append(grid[self.i][self.j + 1])
 
-            if self.j - 1 >= 0:
-                self.neighbours.append(grid[self.i][self.j - 1])
-        except:
-            pass
+        if self.j - 1 >= 0:
+            self.neighbours.append(grid[self.i][self.j - 1])
+
+        # Diagonals
+        if allow_diagonals:
+            if self.i + 1 < len(grid) and self.j + 1 < len(grid[0]):
+                self.neighbours.append(grid[self.i+1][self.j+1])
+
+            if self.i + 1 < len(grid) and self.j - 1 >= 0:
+                self.neighbours.append(grid[self.i+1][self.j-1])
+
+            if self.i - 1 >= 0 and self.j - 1 >= 0:
+                self.neighbours.append(grid[self.i-1][self.j-1])
+
+            if self.i - 1 >= 0 and self.j + 1 < len(grid[0]):
+                self.neighbours.append(grid[self.i-1][self.j+1])
 
     def calculate_f_score(self):
         self.f = self.h + self.g
